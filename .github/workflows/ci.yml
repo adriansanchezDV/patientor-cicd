@@ -34,6 +34,13 @@ jobs:
         working-directory: ./backend
         run: npm run build
 
+      - name: Start backend
+        working-directory: ./backend
+        run: npm start &
+
+      - name: Check backend
+        run: curl --fail http://localhost:3001/api/ping
+
   frontend:
     runs-on: ubuntu-latest
 
