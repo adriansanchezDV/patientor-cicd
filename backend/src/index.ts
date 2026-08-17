@@ -60,7 +60,7 @@ app.post("/api/patients", (req, res) => {
 
     patients.push(newPatient);
     res.json(newPatient);
-  } catch (error: unknown) {
+  } catch {
     res.status(400).send({
       error: "Incorrect or missing data",
     });
@@ -88,7 +88,7 @@ app.post("/api/patients/:id/entries", (req, res) => {
     patient.entries.push(newEntry);
 
     res.json(newEntry);
-  } catch (error: unknown) {
+  } catch  {
     res.status(400).send({
       error: "Incorrect or missing data",
     });
