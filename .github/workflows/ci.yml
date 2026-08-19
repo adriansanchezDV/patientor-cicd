@@ -117,10 +117,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Check Discord webhook
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        run: |
+          if [ -z "$DISCORD_WEBHOOK" ]; then
+            echo "DISCORD_WEBHOOK secret is not configured"
+            exit 1
+          fi
+
       - name: Notify Discord
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         run: |
-          curl -H "Content-Type: application/json" \
+          curl --fail \
+            -H "Content-Type: application/json" \
             -d '{"content":"GitHub Actions: ${{ github.workflow }} terminó con estado ${{ job.status }} en ${{ github.ref }}"}' \
             "$DISCORD_WEBHOOK"
