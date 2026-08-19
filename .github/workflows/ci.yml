@@ -110,3 +110,17 @@ jobs:
         env:
           RENDER_FRONTEND_DEPLOY_HOOK_URL: ${{ secrets.RENDER_FRONTEND_DEPLOY_HOOK_URL }}
         run: curl "$RENDER_FRONTEND_DEPLOY_HOOK_URL"
+
+  notify_discord:
+    needs: [backend, frontend, tag_release, deploy_backend, deploy_frontend]
+    if: always()
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Notify Discord
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        run: |
+          curl -H "Content-Type: application/json" \
+            -d '{"content":"GitHub Actions: ${{ github.workflow }} terminó con estado ${{ job.status }} en ${{ github.ref }}"}' \
+            "$DISCORD_WEBHOOK"
