@@ -68,3 +68,19 @@ jobs:
       - name: Build frontend
         working-directory: ./frontend
         run: npm run build
+
+  tag_release:
+    needs: [backend, frontend]
+    if: ${{ github.event_name == 'push' }}
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create tag
+        uses: anothrNick/github-tag-action@1.73.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BUMP: patch
